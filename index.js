@@ -52,7 +52,34 @@ async function run() {
         const result = await appointmentCollection.insertOne(apponitment);
         res.send(result)
     })
-    
+    app.get('/alltreatments/:email', async(req,res)=>{
+        const receivedEmail=  req.params.email;
+        const query= {secviceAdderEmail: receivedEmail};
+        const cursor= treatmentCollection.find(query);
+        const result= await cursor.toArray()
+        res.send(result);
+
+    })
+    app.patch('/updatetreatment/:id', async(req,res)=>{
+        const receivedId= req.params.id
+        const filter = { _id:new ObjectId(receivedId) };
+        const updateDoc = {
+            $set: {
+                doctorName:req.body.doctorName,
+                image :req.body.image, 
+                degrees :req.body.degrees,
+                department :req.body.department, 
+                dept_Img :req.body.dept_Img, 
+                location :req.body.location, 
+                fee :req.body.fee, 
+                serviceAdderName :req.body.serviceAdderName, 
+                serviceAdderImage :req.body.serviceAdderImage
+            },
+          };
+          const result = await treatmentCollection.updateOne(filter, updateDoc);
+          res.send(result);
+
+    })
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
