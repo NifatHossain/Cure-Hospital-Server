@@ -60,6 +60,14 @@ async function run() {
         res.send(result);
 
     })
+    app.get('/bookedappointments/:email', async(req,res)=>{
+        const receivedEmail=  req.params.email;
+        const query= {patientEmail: receivedEmail};
+        const cursor= appointmentCollection.find(query);
+        const result= await cursor.toArray()
+        res.send(result);
+
+    })
     app.patch('/updatetreatment/:id', async(req,res)=>{
         const receivedId= req.params.id
         const filter = { _id:new ObjectId(receivedId) };
